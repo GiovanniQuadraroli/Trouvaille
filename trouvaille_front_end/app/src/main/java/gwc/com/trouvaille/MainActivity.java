@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        String url = "http://127.0.0.1:3000";
+        String url = "https://trouvaille-rails.herokuapp.com/events.json";
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url + "/events.json", null, new Response.Listener<JSONObject>() {
             @Override
