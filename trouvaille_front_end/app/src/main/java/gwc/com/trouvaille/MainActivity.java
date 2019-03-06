@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
 
     private LinearLayoutManager linearLayoutManager;
+    private DividerItemDecoration dividerItemDecoration;
     private Client client;
     private ArrayList<Event> events;
     private EventsAdapter eventsAdapter;
@@ -46,21 +48,40 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        recyclerView = findViewById(R.id.recyclerView);
+
         events = new ArrayList<Event>();
-        eventsAdapter =
+        eventsAdapter = new EventsAdapter(this, events);
 
+        linearLayoutManager = new LinearLayoutManager(this);
 
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), linearLayoutManager.getOrientation());
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setAdapter(eventsAdapter);
+
+        getEvents();
+
+        recyclerView = findViewById(R.id.recyclerView);
+
+    }
+
+    public void getEvents(){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         String url = "https://trouvaille-rails.herokuapp.com";
-        final ArrayList<Event> events = new ArrayList<>();
-
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url + "/events.json", null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for(int i=0; i<10; i++){
+                for(int i=0; i<response.length(); i++){
                     try {
                         JSONObject jsonEvent = response.getJSONObject(i);
+
                         JSONObject jsonVenue = (JSONObject) jsonEvent.get("venue");
                         Venue venue = new Venue(jsonVenue.getString("id"),jsonVenue.getString("name"),jsonVenue.getString("address_1"),
                                 jsonVenue.getString("city"),jsonVenue.getString("state"),jsonVenue.getString("country"),
@@ -73,8 +94,9 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+                eventsAdapter.notifyDataSetChanged();
                 Log.e("Rest response: ", response.toString());
-                Log.e("ArrayList:", ""+events.toString() );
+                Log.e("ArrayList:", ""+events.size());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -82,10 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("Rest response: ", error.toString());
             }
         });
-
         requestQueue.add(request);
-        recyclerView = findViewById(R.id.recyclerView);
-
     }
 
 

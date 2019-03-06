@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import gwc.com.trouvaille.Entity.Event;
@@ -35,19 +37,24 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        Event event = events.get(i);
+
+        viewHolder.title.setText(event.getTitle());
+        viewHolder.description.setText(event.getDescription());
+        Picasso.get().load(event.getVenue().getImage()).into(viewHolder.imageView);
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return events.size();
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView title;
-        public TextView description;
+        private TextView title;
+        private TextView description;
         private ImageView imageView;
         private CardView cardView;
 
