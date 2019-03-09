@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Trouvaille</string>
+    <string name="title_activity_venue">VenueActivity</string>
 </resources>

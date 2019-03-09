@@ -1,12 +1,13 @@
 package gwc.com.trouvaille;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,12 +37,20 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Event event = events.get(i);
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
+        final Event event = events.get(i);
 
         viewHolder.title.setText(event.getTitle());
         viewHolder.description.setText(event.getDescription());
         Picasso.get().load(event.getVenue().getImage()).into(viewHolder.imageView);
+        viewHolder.joinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, VenueActivity.class);
+                intent.putExtra("venue", event.getVenue());
+                context.startActivity(intent);
+            }
+        });
 
     }
 
@@ -56,13 +65,15 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private TextView title;
         private TextView description;
         private ImageView imageView;
-        private CardView cardView;
+        private Button joinButton;
 
         public ViewHolder(View itemView){
             super(itemView);
             title = itemView.findViewById(R.id.title);
             description = itemView.findViewById(R.id.description);
             imageView = itemView.findViewById(R.id.imageView);
+            joinButton = itemView.findViewById(R.id.joinButton);
+
         }
 
         public TextView getTitle() {

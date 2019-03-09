@@ -3,7 +3,9 @@ package gwc.com.trouvaille.Entity;
 import android.media.Image;
 import android.widget.ImageView;
 
-public class Venue {
+import java.io.Serializable;
+
+public class Venue implements Serializable {
 
     private String id;
     private String name;

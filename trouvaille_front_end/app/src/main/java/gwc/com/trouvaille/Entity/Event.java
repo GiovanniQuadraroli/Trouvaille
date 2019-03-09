@@ -2,7 +2,9 @@ package gwc.com.trouvaille.Entity;
 
 import android.media.Image;
 
-public class Event {
+import java.io.Serializable;
+
+public class Event implements Serializable {
 
     private String id;
     private String title;

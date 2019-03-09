@@ -1,5 +1,6 @@
 package gwc.com.trouvaille;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -10,6 +11,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -49,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setView();
+    }
+
+    public void setView(){
         recyclerView = findViewById(R.id.recyclerView);
 
         events = new ArrayList<Event>();
@@ -66,9 +72,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(eventsAdapter);
 
         getEvents();
-
-        recyclerView = findViewById(R.id.recyclerView);
-
     }
 
     public void getEvents(){
