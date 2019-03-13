@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         final Event event = events.get(i);
-
         viewHolder.title.setText(event.getTitle());
         viewHolder.description.setText(event.getDescription());
         Picasso.get().load(event.getVenue().getImage()).into(viewHolder.imageView);
@@ -48,6 +48,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             public void onClick(View v) {
                 Intent intent = new Intent(context, VenueActivity.class);
                 intent.putExtra("venue", event.getVenue());
+                Log.e("Event Venue Name", "venue name:" +event.getVenue().getName() + " event name: " + event.getTitle());
                 context.startActivity(intent);
             }
         });

@@ -1,14 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+    <LinearLayout
+        android:id="@+id/venue_layout"
         android:layout_width="match_parent"
-        android:layout_height="0px"
-        android:layout_weight="1">
-    </android.support.v4.view.ViewPager>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="100"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/venue_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="40"
+            android:contentDescription="@string/insert_the_image_here" />
+
+        <Switch
+            android:id="@+id/share_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="top"
+            android:text="@string/share_position"
+            android:textOff="OFF"
+            android:textOn="ON"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/venue_name"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:text="@string/put_the_name_here"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/venue_address"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:ems="10"
+            android:text="@string/put_the_address_here" />
+
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

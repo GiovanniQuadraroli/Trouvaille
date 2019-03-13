@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Trouvaille</string>
     <string name="title_activity_venue">VenueActivity</string>
+    <string name="put_the_name_here">Put the name here</string>
+    <string name="insert_the_image_here">Insert the image here</string>
+    <string name="put_the_address_here">Put the address here</string>
+    <string name="share_position">Share Position</string>
 </resources>
