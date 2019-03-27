@@ -40,6 +40,30 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()){
+                case R.id.home:
+                    Toast.makeText(MainActivity.this, "Home clicked", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.search:
+                    Intent intent = new Intent(MainActivity.this, UserPreferenceActivity.class);
+                    MainActivity.this.getApplicationContext().startActivity(intent);
+                    break;
+                case R.id.account:
+                    Toast.makeText(MainActivity.this, "Account clicked", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.settings:
+                    Toast.makeText(MainActivity.this, "Settings clicked", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            return true;
+        }
+    };
+
     private LinearLayoutManager linearLayoutManager;
     private DividerItemDecoration dividerItemDecoration;
     private Client client;
@@ -50,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         setView();
     }
@@ -75,9 +102,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getEvents(){
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        String url = "https://trouvaille-rails.herokuapp.com";
+        String url = Client.getInstance(this.getApplicationContext()).getUrl();
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url + "/events.json", null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -107,34 +133,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("Rest response: ", error.toString());
             }
         });
-        requestQueue.add(request);
+
+        Client.getInstance(this.getApplicationContext()).addToRequestQueue(request);
     }
 
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        BottomNavigationView bottomView = findViewById(R.id.bottom_navigation);
-        bottomView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.home:
-                        Toast.makeText(MainActivity.this, "Home clicked", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.search:
-                        Toast.makeText(MainActivity.this, "Search clicked", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.account:
-                        Toast.makeText(MainActivity.this, "Account clicked", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.settings:
-                        Toast.makeText(MainActivity.this, "Settings clicked", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-                return true;
-            }
-        });
-    }
 }
