@@ -12,31 +12,14 @@
 
     <Button
         android:id="@+id/send_user_pref"
-        android:layout_width="wrap_content"
+        android:layout_width="89dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="268dp"
-        android:layout_marginLeft="268dp"
-        android:layout_marginTop="32dp"
-        android:text="Send"
+        android:layout_marginStart="148dp"
+        android:layout_marginLeft="148dp"
+        android:layout_marginTop="8dp"
+        android:text="Apply"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/price_bar" />
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="0dp"
-        android:background="?android:attr/windowBackground"
-        android:backgroundTint="@color/colorPrimary"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        design:menu="@menu/menu">
-
-    </android.support.design.widget.BottomNavigationView>
+        app:layout_constraintTop_toBottomOf="@+id/tags_list" />
 
     <com.appyvet.materialrangebar.RangeBar
         android:id="@+id/price_bar"
@@ -105,5 +88,15 @@
         android:text="Set the max and min price"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/distance_bar" />
+
+    <ListView
+        android:id="@+id/tags_list"
+        android:layout_width="368dp"
+        android:layout_height="238dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/price_bar" />
 
 </android.support.constraint.ConstraintLayout>
