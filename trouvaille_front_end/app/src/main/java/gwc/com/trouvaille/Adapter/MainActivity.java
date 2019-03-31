@@ -1,40 +1,24 @@
-package gwc.com.trouvaille;
+package gwc.com.trouvaille.Adapter;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import gwc.com.trouvaille.Entity.Event;
 import gwc.com.trouvaille.Entity.User;
-import gwc.com.trouvaille.Entity.Venue;
+import gwc.com.trouvaille.EventsAdapter;
+import gwc.com.trouvaille.R;
+import gwc.com.trouvaille.UserPreferenceActivity;
 import gwc.com.trouvaille.client.Client;
 
 public class MainActivity extends AppCompatActivity {

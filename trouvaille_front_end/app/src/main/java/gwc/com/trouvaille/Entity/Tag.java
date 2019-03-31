@@ -16,9 +16,7 @@ public class Tag {
 
         private String tag;
 
-        private Tags(String s){
-            tag = s;
-        }
+        private Tags(String s){tag = s;}
     }
 
     public Tag(Tags tag){

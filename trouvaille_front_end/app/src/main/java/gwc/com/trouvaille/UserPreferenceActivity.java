@@ -3,19 +3,17 @@ package gwc.com.trouvaille;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.appyvet.materialrangebar.RangeBar;
 
@@ -24,6 +22,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import gwc.com.trouvaille.Adapter.MainActivity;
+import gwc.com.trouvaille.Adapter.TagsAdapter;
 import gwc.com.trouvaille.Entity.Tag;
 import gwc.com.trouvaille.Entity.User;
 import gwc.com.trouvaille.client.Client;
@@ -40,10 +40,15 @@ public class UserPreferenceActivity extends AppCompatActivity {
     private ListView tagsListView;
 
     private ArrayList<Tag> selectedTag = new ArrayList<>();
+    private ArrayList<Tag> tags = new ArrayList<>();
 
 
     private RangeBar distanceBar;
     private RangeBar priceBar;
+    private RecyclerView recyclerView;
+    private TagsAdapter tagsAdapter;
+    private LinearLayoutManager linearLayoutManager;
+    private DividerItemDecoration dividerItemDecoration;
 
 
     @Override
@@ -51,30 +56,17 @@ public class UserPreferenceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_preference);
 
-        ArrayList tags = new ArrayList();
+//        tags = requestTags();
+
+
+        setTagsView();
+
         for(Tag.Tags t:Tag.Tags.values()){
             tags.add(new Tag(t));
         }
-        ListAdapter tagsListAdapter = new ArrayAdapter<Tag>(this, android.R.layout.simple_list_item_1, tags);
-        tagsListView = (ListView) findViewById(R.id.tags_list);
-        tagsListView.setAdapter(tagsListAdapter);
-        tagsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Tag tag = (Tag) parent.getItemAtPosition(position);
-                if(selectedTag.contains(tag)){
-                    selectedTag.remove(tag);
-                }
-                else{
-                    selectedTag.add(tag);
-                }
-            }
-        });
 
-
-
-        distanceBar = (RangeBar) findViewById(R.id.distance_bar);
-        priceBar = (RangeBar) findViewById(R.id.price_bar);
+        distanceBar = findViewById(R.id.distance_bar);
+        priceBar = findViewById(R.id.price_bar);
         minD = distanceBar.getLeftIndex();
         maxD = distanceBar.getRightIndex();
         minP = priceBar.getLeftIndex();
@@ -97,12 +89,13 @@ public class UserPreferenceActivity extends AppCompatActivity {
         });
 
 
-        sendUserPrefsButton = (Button) findViewById(R.id.send_user_pref);
+        sendUserPrefsButton = findViewById(R.id.send_user_pref);
 
         sendUserPrefsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JSONObject pref = new JSONObject();
+                selectedTag = tagsAdapter.getSelectedTags();
                 if(minD>maxD) maxD = minD;
                 if(minP>maxP) maxP = minP;
                 try {
@@ -119,5 +112,46 @@ public class UserPreferenceActivity extends AppCompatActivity {
                 v.getContext().startActivity(intent);
             }
         });
+    }
+
+    private void setTagsView() {
+        recyclerView = findViewById(R.id.tags_list);
+
+        tagsAdapter = new TagsAdapter(this, tags);
+        linearLayoutManager = new LinearLayoutManager(this);
+
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), linearLayoutManager.getOrientation());
+
+//        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setAdapter(tagsAdapter);
+    }
+
+    private ArrayList<Tag> requestTags() {
+        String url = Client.getInstance(this).getUrl();
+        final ArrayList<Tag> tmp = new ArrayList<>();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url + "/users/1/preference", null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String[] requestTags = (String[])response.getJSONObject("display_options").get("tag_lists");
+                    for(String tag:requestTags){
+                        tmp.add(new Tag(Tag.Tags.valueOf(tag)));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Rest response: ", error.toString());
+            }
+        });
+
+        Client.getInstance(this.getApplicationContext()).addToRequestQueue(request);
+        return tmp;
     }
 }
