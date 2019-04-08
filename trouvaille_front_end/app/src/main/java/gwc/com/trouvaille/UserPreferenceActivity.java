@@ -56,14 +56,14 @@ public class UserPreferenceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_preference);
 
-//        tags = requestTags();
 
 
         setTagsView();
+        tags = requestTags();
 
-        for(Tag.Tags t:Tag.Tags.values()){
-            tags.add(new Tag(t));
-        }
+//        for(Tag.Tags t:Tag.Tags.values()){
+//            tags.add(new Tag(t));
+//        }
 
         distanceBar = findViewById(R.id.distance_bar);
         priceBar = findViewById(R.id.price_bar);
@@ -123,7 +123,8 @@ public class UserPreferenceActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), linearLayoutManager.getOrientation());
 
-//        recyclerView.setHasFixedSize(true);
+
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(tagsAdapter);
@@ -132,7 +133,7 @@ public class UserPreferenceActivity extends AppCompatActivity {
     private ArrayList<Tag> requestTags() {
         String url = Client.getInstance(this).getUrl();
         final ArrayList<Tag> tmp = new ArrayList<>();
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url + "/users/1/preference", null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url + "/users/2/preference", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
