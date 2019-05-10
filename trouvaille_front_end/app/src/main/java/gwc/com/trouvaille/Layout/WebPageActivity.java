@@ -1,4 +1,4 @@
-package gwc.com.trouvaille;
+package gwc.com.trouvaille.Layout;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
+
+import gwc.com.trouvaille.R;
 
 public class WebPageActivity extends AppCompatActivity {
 

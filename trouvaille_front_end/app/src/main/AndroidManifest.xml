@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/trouvaille_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UserPreferenceActivity">
+        <activity android:name=".Layout.UserPreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,9 +19,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".VenueActivity"
-            android:parentActivityName=".Adapter.MainActivity" />
-        <activity android:name=".Adapter.MainActivity"></activity>
+            android:name=".Layout.VenueActivity"
+            android:parentActivityName=".Layout.MainActivity" />
+        <activity android:name=".Layout.MainActivity" />
+        <activity
+            android:name=".Layout.ResultsActivity"
+            android:label="@string/title_activity_results"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".Layout.MainActivity"></activity>
     </application>
 
 </manifest>

@@ -6,15 +6,8 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Adapter.MainActivity"
+    tools:context=".Layout.MainActivity"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="?attr/actionBarSize"
-        ></android.support.v7.widget.RecyclerView>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -32,4 +25,15 @@
         design:menu="@menu/menu">
 
     </android.support.design.widget.BottomNavigationView>
+
+    <Button
+        android:id="@+id/start_search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="128dp"
+        android:layout_marginLeft="128dp"
+        android:layout_marginTop="228dp"
+        android:text="Start Search"
+        design:layout_constraintStart_toStartOf="parent"
+        design:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

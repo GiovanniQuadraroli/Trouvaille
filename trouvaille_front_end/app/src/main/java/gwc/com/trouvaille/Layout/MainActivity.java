@@ -1,4 +1,4 @@
-package gwc.com.trouvaille.Adapter;
+package gwc.com.trouvaille.Layout;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -10,15 +10,24 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
+import gwc.com.trouvaille.Entity.Venue;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 
+import gwc.com.trouvaille.Adapter.EventsAdapter;
 import gwc.com.trouvaille.Entity.Event;
 import gwc.com.trouvaille.Entity.User;
-import gwc.com.trouvaille.EventsAdapter;
 import gwc.com.trouvaille.R;
-import gwc.com.trouvaille.UserPreferenceActivity;
 import gwc.com.trouvaille.client.Client;
 
 public class MainActivity extends AppCompatActivity {
@@ -65,6 +74,19 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        Button searchButton = findViewById(R.id.start_search_button);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<Venue> venues = startSearch();
+                if(venues!=null){
+                    Intent intent = new Intent(v.getContext(), ResultsActivity.class);
+                    intent.putExtra("venues", venues);
+                    v.getContext().startActivity(intent);
+                }
+            }
+        });
+
 //        setView();
     }
 
@@ -88,7 +110,23 @@ public class MainActivity extends AppCompatActivity {
 //        getEvents();
 //
 //    }
-//
+
+    public ArrayList<Venue> startSearch(){
+        String url = Client.getInstance(this.getApplicationContext()).getUrl();
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url + "", null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.e("Venues Suggested:", response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Rest response: ", error.toString());
+            }
+        });
+        return null;
+    }
+
 //    public void getEvents(){
 //
 //        String url = Client.getInstance(this.getApplicationContext()).getUrl();

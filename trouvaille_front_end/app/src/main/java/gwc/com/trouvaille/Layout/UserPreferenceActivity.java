@@ -1,4 +1,4 @@
-package gwc.com.trouvaille;
+package gwc.com.trouvaille.Layout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,10 +22,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import gwc.com.trouvaille.Adapter.MainActivity;
+import gwc.com.trouvaille.Layout.MainActivity;
 import gwc.com.trouvaille.Adapter.TagsAdapter;
 import gwc.com.trouvaille.Entity.Tag;
 import gwc.com.trouvaille.Entity.User;
+import gwc.com.trouvaille.R;
 import gwc.com.trouvaille.client.Client;
 
 public class UserPreferenceActivity extends AppCompatActivity {
@@ -133,7 +134,7 @@ public class UserPreferenceActivity extends AppCompatActivity {
     private ArrayList<Tag> requestTags() {
         String url = Client.getInstance(this).getUrl();
         final ArrayList<Tag> tmp = new ArrayList<>();
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url + "/users/2/preference", null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url + "/users/1/preference", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {

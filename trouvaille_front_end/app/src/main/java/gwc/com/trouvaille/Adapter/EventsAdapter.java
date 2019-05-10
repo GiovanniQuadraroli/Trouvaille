@@ -1,4 +1,4 @@
-package gwc.com.trouvaille;
+package gwc.com.trouvaille.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import gwc.com.trouvaille.Entity.Event;
+import gwc.com.trouvaille.R;
+import gwc.com.trouvaille.Layout.VenueActivity;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 

@@ -3,22 +3,22 @@
 
     <item
         android:id="@+id/home"
-        android:title="Home"
+        android:name="Home"
         android:icon="@drawable/ic_home"/>
 
     <item
         android:id="@+id/search"
-        android:title="Search"
+        android:name="Search"
         android:icon="@drawable/ic_search"/>
 
     <item
         android:id="@+id/account"
-        android:title="Account"
+        android:name="Account"
         android:icon="@drawable/ic_account"/>
 
     <item
         android:id="@+id/settings"
-        android:title="Settings"
+        android:name="Settings"
         android:icon="@drawable/ic_settings"/>
 
 </menu>
