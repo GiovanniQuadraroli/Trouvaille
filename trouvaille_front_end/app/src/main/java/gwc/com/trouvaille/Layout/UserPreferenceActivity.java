@@ -17,6 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.appyvet.materialrangebar.RangeBar;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,7 +42,7 @@ public class UserPreferenceActivity extends AppCompatActivity {
     private ListView tagsListView;
 
     private ArrayList<Tag> selectedTag = new ArrayList<>();
-    private ArrayList<Tag> tags = new ArrayList<>();
+    public ArrayList<Tag> tags = new ArrayList<>();
 
 
     private RangeBar distanceBar;
@@ -57,14 +58,7 @@ public class UserPreferenceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_preference);
 
-
-
         setTagsView();
-        tags = requestTags();
-
-//        for(Tag.Tags t:Tag.Tags.values()){
-//            tags.add(new Tag(t));
-//        }
 
         distanceBar = findViewById(R.id.distance_bar);
         priceBar = findViewById(R.id.price_bar);
@@ -100,11 +94,12 @@ public class UserPreferenceActivity extends AppCompatActivity {
                 if(minD>maxD) maxD = minD;
                 if(minP>maxP) maxP = minP;
                 try {
-                    pref.put("min price", minP);
-                    pref.put("max price", maxP);
-                    pref.put("min distance", minD);
-                    pref.put("max distance", maxD);
-                    pref.put("tags", selectedTag);
+                    pref.put("min_price", minP);
+                    pref.put("max_price", maxP);
+                    pref.put("min_distance", minD);
+                    pref.put("max_distance", maxD);
+                    pref.put("tag_list", selectedTag);
+                    updatePreferences(pref);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -113,6 +108,26 @@ public class UserPreferenceActivity extends AppCompatActivity {
                 v.getContext().startActivity(intent);
             }
         });
+        requestTags();
+    }
+
+    private void updatePreferences(JSONObject pref) throws JSONException {
+        JSONObject body = new JSONObject();
+        body.put("user_preference", pref);
+        String url = Client.getInstance(this).getUrl();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url + "/users/1/preference.json", body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        Client.getInstance(this.getApplicationContext()).addToRequestQueue(request);
+
     }
 
     private void setTagsView() {
@@ -131,16 +146,17 @@ public class UserPreferenceActivity extends AppCompatActivity {
         recyclerView.setAdapter(tagsAdapter);
     }
 
-    private ArrayList<Tag> requestTags() {
+    private void requestTags() {
         String url = Client.getInstance(this).getUrl();
-        final ArrayList<Tag> tmp = new ArrayList<>();
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url + "/users/1/preference", null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url + "/users/1/preference.json", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    String[] requestTags = (String[])response.getJSONObject("display_options").get("tag_lists");
-                    for(String tag:requestTags){
-                        tmp.add(new Tag(Tag.Tags.valueOf(tag)));
+                    JSONObject options = response.getJSONObject("display_options");
+                    JSONArray jsonTags = options.getJSONArray("tag_lists");
+                    for(int i = 0; i<jsonTags.length(); i++){
+                        tags.add(new Tag(jsonTags.getString(i)));
+                        tagsAdapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -154,6 +170,5 @@ public class UserPreferenceActivity extends AppCompatActivity {
         });
 
         Client.getInstance(this.getApplicationContext()).addToRequestQueue(request);
-        return tmp;
     }
 }

@@ -13,14 +13,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import gwc.com.trouvaille.Entity.Tag;
 import gwc.com.trouvaille.Entity.Venue;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -69,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.e("User Pref:", User.getInstance().getUserPreference().toString());
+        requestTags();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -87,29 +92,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        setView();
     }
 
-//    public void setView(){
-//        recyclerView = findViewById(R.id.recyclerView);
-//
-//        events = new ArrayList<Event>();
-//        eventsAdapter = new EventsAdapter(this, events);
-//
-//        linearLayoutManager = new LinearLayoutManager(this);
-//
-//        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//
-//        dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), linearLayoutManager.getOrientation());
-//
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(linearLayoutManager);
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-//        recyclerView.setAdapter(eventsAdapter);
-//
-//        getEvents();
-//
-//    }
 
     public ArrayList<Venue> startSearch(){
         String url = Client.getInstance(this.getApplicationContext()).getUrl();
@@ -127,40 +111,22 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-//    public void getEvents(){
-//
-//        String url = Client.getInstance(this.getApplicationContext()).getUrl();
-//        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url + "/events.json", null, new Response.Listener<JSONArray>() {
-//            @Override
-//            public void onResponse(JSONArray response) {
-//                for(int i=0; i<response.length(); i++){
-//                    try {
-//                        JSONObject jsonEvent = response.getJSONObject(i);
-//
-//                        JSONObject jsonVenue = (JSONObject) jsonEvent.get("venue");
-//                        Venue venue = new Venue(jsonVenue.getString("id"),jsonVenue.getString("name"),jsonVenue.getString("address_1"),
-//                                jsonVenue.getString("city"),jsonVenue.getString("state"),jsonVenue.getString("country"),
-//                                jsonVenue.getString("location"),((JSONArray)jsonVenue.get("images")).get(0).toString());
-//                        Event event = new Event(jsonEvent.getString("id"), jsonEvent.getString("title"),
-//                                jsonEvent.getString("description"),venue,null);
-//                        events.add(event);
-//
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                eventsAdapter.notifyDataSetChanged();
-//                Log.e("Rest response: ", response.toString());
-//                Log.e("ArrayList:", ""+events.size());
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.e("Rest response: ", error.toString());
-//            }
-//        });
-//
-//        Client.getInstance(this.getApplicationContext()).addToRequestQueue(request);
-//    }
+    private void requestTags() {
+        String url = Client.getInstance(this).getUrl();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url + "/users/1/preference.json", null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.e("Response", response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Rest response: ", error.toString());
+            }
+        });
+
+        Client.getInstance(this.getApplicationContext()).addToRequestQueue(request);
+    }
+
 
 }

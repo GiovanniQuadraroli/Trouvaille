@@ -3,6 +3,7 @@ package gwc.com.trouvaille.Adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,15 +45,15 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
         viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CheckBox box = (CheckBox) v;
-                if(box.isChecked()){
-                    selectedTag.add(tag);
-                }
-                else{
+                if(tag.isSelected()){
                     selectedTag.remove(tag);
                 }
+                else selectedTag.add(tag);
+                tag.selectTag();
+
             }
         });
+        viewHolder.checkBox.setChecked(tag.isSelected());
     }
 
     @Override

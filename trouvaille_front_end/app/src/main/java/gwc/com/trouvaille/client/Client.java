@@ -29,7 +29,7 @@ public class Client {
         return url;
     }
 
-    private String url = "https://trouvaille-rails.herokuapp.com/api/v1";
+    private String url = "http://trouvaille-rails.herokuapp.com/api/v1";
 
     private Client(Context context){
         this.context = context;
