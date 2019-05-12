@@ -22,6 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 import gwc.com.trouvaille.Layout.MainActivity;
 import gwc.com.trouvaille.Adapter.TagsAdapter;
@@ -91,6 +93,10 @@ public class UserPreferenceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 JSONObject pref = new JSONObject();
                 selectedTag = tagsAdapter.getSelectedTags();
+                JSONArray tmp = new JSONArray();
+                for(Tag tag : selectedTag) {
+                    tmp.put(tag.toString());
+                }
                 if(minD>maxD) maxD = minD;
                 if(minP>maxP) maxP = minP;
                 try {
@@ -98,7 +104,7 @@ public class UserPreferenceActivity extends AppCompatActivity {
                     pref.put("max_price", maxP);
                     pref.put("min_distance", minD);
                     pref.put("max_distance", maxD);
-                    pref.put("tag_list", selectedTag);
+                    pref.put("tag_list", tmp);
                     updatePreferences(pref);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -114,8 +120,10 @@ public class UserPreferenceActivity extends AppCompatActivity {
     private void updatePreferences(JSONObject pref) throws JSONException {
         JSONObject body = new JSONObject();
         body.put("user_preference", pref);
+        Log.e("updatePreferences: ", body.toString());
         String url = Client.getInstance(this).getUrl();
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url + "/users/1/preference.json", body, new Response.Listener<JSONObject>() {
+        Log.e("URL", url + "/users/1/preference");
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url + "/users/1/preference", body, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
             }
