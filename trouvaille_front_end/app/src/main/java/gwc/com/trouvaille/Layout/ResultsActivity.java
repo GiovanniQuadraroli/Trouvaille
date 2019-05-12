@@ -8,18 +8,29 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import gwc.com.trouvaille.Adapter.VenueAdapter;
 import gwc.com.trouvaille.Entity.Venue;
 import gwc.com.trouvaille.R;
+import gwc.com.trouvaille.client.Client;
 
 public class ResultsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private ArrayList<Venue> venues;
+    private ArrayList<Venue> venues = new ArrayList<>();
     private VenueAdapter venuesAdapter;
 
     @Override
@@ -27,9 +38,7 @@ public class ResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
-        venues = new ArrayList<>();
-        venues = (ArrayList<Venue>) getIntent().getSerializableExtra("venues");
-
+        startSearch();
         setResultsView();
 
 
@@ -49,6 +58,35 @@ public class ResultsActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(itemDecoration);
         recyclerView.setAdapter(venuesAdapter);
 
+    }
+
+    public void startSearch(){
+        String url = Client.getInstance(this.getApplicationContext()).getUrl();
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url + "/events/venue_recommendation.json?user_id=1", null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for(int i = 0; i < response.length(); i++){
+                    try {
+                        JSONObject venueJson = response.getJSONObject(i);
+                        Venue venue = new Venue();
+                        venue.setName(venueJson.getString("name"));
+                        if(venueJson.getJSONArray("images").length()>0) {
+                            venue.setImage(venueJson.getJSONArray("images").getString(0));
+                        }
+                        venues.add(venue);
+                        venuesAdapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Rest response: ", error.toString());
+            }
+        });
+        Client.getInstance(this.getApplicationContext()).addToRequestQueue(request);
     }
 
 }

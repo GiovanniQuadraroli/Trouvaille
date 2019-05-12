@@ -120,9 +120,7 @@ public class UserPreferenceActivity extends AppCompatActivity {
     private void updatePreferences(JSONObject pref) throws JSONException {
         JSONObject body = new JSONObject();
         body.put("user_preference", pref);
-        Log.e("updatePreferences: ", body.toString());
         String url = Client.getInstance(this).getUrl();
-        Log.e("URL", url + "/users/1/preference");
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url + "/users/1/preference", body, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

@@ -35,7 +35,7 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.ViewHolder>{
     @NonNull
     @Override
     public VenueAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.event_card,viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.venue_card,viewGroup, false);
         return new VenueAdapter.ViewHolder(view);
     }
 
@@ -43,18 +43,7 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull final VenueAdapter.ViewHolder viewHolder, int i) {
         final Venue venue = venues.get(i);
         viewHolder.name.setText(venue.getName());
-        viewHolder.address.setText(venue.getAddress());
-        Picasso.get().load(venue.getImage()).into(viewHolder.imageView);
-        viewHolder.joinButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, VenueActivity.class);
-                intent.putExtra("venue", venue);
-                Log.e("Selected Venue name", "venue name:" + venue.getName());
-                context.startActivity(intent);
-            }
-        });
-
+        if(venue.hasImage()) Picasso.get().load(venue.getImage()).into(viewHolder.imageView);
     }
 
     @Override
@@ -71,6 +60,8 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.ViewHolder>{
 
         public ViewHolder(View itemView){
             super(itemView);
+            name = itemView.findViewById(R.id.venue_title);
+            imageView = itemView.findViewById(R.id.venue_imageView);
         }
 
         public TextView getName() {

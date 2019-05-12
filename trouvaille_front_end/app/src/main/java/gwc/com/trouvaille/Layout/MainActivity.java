@@ -38,6 +38,9 @@ import gwc.com.trouvaille.client.Client;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
+    private ArrayList<Venue> venues = new ArrayList<>();
+    private Client client;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -63,18 +66,12 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private LinearLayoutManager linearLayoutManager;
-    private DividerItemDecoration dividerItemDecoration;
-    private Client client;
-    private ArrayList<Event> events;
-    private EventsAdapter eventsAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        requestTags();
+        startSearch();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -83,10 +80,8 @@ public class MainActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Venue> venues = startSearch();
                 if(venues!=null){
                     Intent intent = new Intent(v.getContext(), ResultsActivity.class);
-                    intent.putExtra("venues", venues);
                     v.getContext().startActivity(intent);
                 }
             }
@@ -95,12 +90,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public ArrayList<Venue> startSearch(){
+    public void startSearch(){
         String url = Client.getInstance(this.getApplicationContext()).getUrl();
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url + "", null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url + "/events/venue_recommendation.json?user_id=1", null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Log.e("Venues Suggested:", response.toString());
+                for(int i = 0; i < response.length(); i++){
+                    try {
+                        JSONObject venueJson = response.getJSONObject(i);
+                        Venue venue = new Venue();
+                        venue.setName(venueJson.getString("name"));
+                        if(venueJson.getJSONArray("images").length()>0) {
+                            venue.setImage(venueJson.getJSONArray("images").getString(0));
+                        }
+                        venues.add(venue);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -108,25 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("Rest response: ", error.toString());
             }
         });
-        return null;
-    }
-
-    private void requestTags() {
-        String url = Client.getInstance(this).getUrl();
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url + "/users/1/preference.json", null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.e("Response", response.toString());
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Rest response: ", error.toString());
-            }
-        });
-
         Client.getInstance(this.getApplicationContext()).addToRequestQueue(request);
     }
-
 
 }

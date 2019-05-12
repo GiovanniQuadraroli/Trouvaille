@@ -24,8 +24,6 @@
         <activity android:name=".Layout.MainActivity" />
         <activity
             android:name=".Layout.ResultsActivity"
-            android:label="@string/title_activity_results"
-            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".Layout.MainActivity"></activity>
     </application>
 

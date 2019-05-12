@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class Venue implements Serializable {
 
-    private String id;
+    private int id;
     private String name;
     private String address;
     private String city;
@@ -15,8 +15,11 @@ public class Venue implements Serializable {
     private String country;
     private String location;
     private String image;
+    private boolean hasImage;
 
-    public Venue(String id, String name, String address, String city, String state, String country, String location, String image){
+    public Venue(){};
+
+    public Venue(int id, String name, String address, String city, String state, String country, String location, String image){
         this.id = id;
         this.name = name;
         this.address = address;
@@ -27,11 +30,11 @@ public class Venue implements Serializable {
         this.image = image;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -89,5 +92,8 @@ public class Venue implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+        hasImage = true;
     }
+
+    public boolean hasImage(){return hasImage;}
 }
