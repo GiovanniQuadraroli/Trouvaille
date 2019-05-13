@@ -27,13 +27,15 @@ public class VenueActivity extends AppCompatActivity {
     }
 
     public void bindVenueToView(Venue venue){
-        ImageView imageView = findViewById(R.id.venue_image);
+        if(venue.hasImage()) {
+            ImageView imageView = findViewById(R.id.venue_image);
+            Picasso.get().load(venue.getImage()).into(imageView);
+        }
         TextView name = findViewById(R.id.venue_name);
-        TextView address = findViewById(R.id.venue_address);
+//        TextView address = findViewById(R.id.venue_address);
 
         name.setText(venue.getName());
-        address.setText(venue.getAddress());
-        Picasso.get().load(venue.getImage()).into(imageView);
+//        address.setText(venue.getAddress());
     }
 
 }

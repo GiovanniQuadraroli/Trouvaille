@@ -44,6 +44,16 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.ViewHolder>{
         final Venue venue = venues.get(i);
         viewHolder.name.setText(venue.getName());
         if(venue.hasImage()) Picasso.get().load(venue.getImage()).into(viewHolder.imageView);
+        viewHolder.joinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, VenueActivity.class);
+                intent.putExtra("venue", venue);
+                Log.e("Selected Venue name", "venue name:" + venue.getName());
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -62,6 +72,7 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.ViewHolder>{
             super(itemView);
             name = itemView.findViewById(R.id.venue_title);
             imageView = itemView.findViewById(R.id.venue_imageView);
+            joinButton = itemView.findViewById(R.id.venue_joinButton);
         }
 
         public TextView getName() {
