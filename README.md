@@ -1,5 +1,7 @@
 # Trouvaille
 
+[Link to apk:](https://drive.google.com/open?id=1i51_s5W3eH-wY9a3qcAkEjf4mr0UBPEk)
+
 Creation of user preferences activity:
 - Ask for min and max distance
 - Ask for min and max price
